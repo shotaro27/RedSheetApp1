@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RedSheetApp1
 {
-	public class Program
+	public static class Program
 	{
 		public static void Main(string[] args)
 		{

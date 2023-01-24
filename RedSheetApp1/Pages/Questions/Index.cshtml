@@ -1,0 +1,48 @@
+﻿@page
+@model RedSheetApp1.Pages.Questions.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Question[0].CreateDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Question[0].UpdateDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Question[0].Text)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Question) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdateDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Text)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.QuestionID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.QuestionID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.QuestionID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
