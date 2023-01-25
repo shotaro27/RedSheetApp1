@@ -15,5 +15,6 @@ namespace RedSheetApp1.Data
         }
 
         public DbSet<Question> Question { get; set; }
+        public DbSet<Keywords> Keywords { get; set; }
     }
 }

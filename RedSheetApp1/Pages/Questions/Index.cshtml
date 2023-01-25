@@ -46,3 +46,37 @@
 }
     </tbody>
 </table>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Keywords[0].QuestionID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Keywords[0].CreateDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Keywords[0].Word)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Keywords)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuestionID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Word)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.QuestionID">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.QuestionID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.QuestionID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -19,6 +19,27 @@ namespace RedSheetApp1.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("RedSheetApp1.Models.Keywords", b =>
+                {
+                    b.Property<int>("KeywordsID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("QuestionID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Word")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("KeywordsID");
+
+                    b.ToTable("Keywords");
+                });
+
             modelBuilder.Entity("RedSheetApp1.Models.Question", b =>
                 {
                     b.Property<int>("QuestionID")

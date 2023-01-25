@@ -21,10 +21,10 @@ namespace RedSheetApp1.Models
         static readonly string endpoint = "https://redsheet.cognitiveservices.azure.com/";
         static readonly string subscriptionKey = "ff767535093e42d68e8ea7b016ae52bd";
 
-        public void ExtractKeywords()
+        public KeyPhraseCollection ExtractKeywords()
         {
             var textClient = AuthenticateTextAnalytics(endpoint, subscriptionKey);
-            var Keywords = KeyPhraseExtract(textClient, Text);
+            return KeyPhraseExtract(textClient, Text);
         }
 
         public static TextAnalyticsClient AuthenticateTextAnalytics(string endpoint, string key)
@@ -32,10 +32,10 @@ namespace RedSheetApp1.Models
             return new TextAnalyticsClient(new Uri(endpoint), new AzureKeyCredential(key));
         }
 
-        public static string[] KeyPhraseExtract(TextAnalyticsClient client, string text)
+        public static KeyPhraseCollection KeyPhraseExtract(TextAnalyticsClient client, string text)
         {
             var response = client.ExtractKeyPhrases(text, "ja");
-            return response.Value.ToArray();
+            return response.Value;
         }
     }
 }

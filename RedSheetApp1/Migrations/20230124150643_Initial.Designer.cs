@@ -10,8 +10,8 @@ using RedSheetApp1.Data;
 namespace RedSheetApp1.Migrations
 {
     [DbContext(typeof(RedSheetApp1Context))]
-    [Migration("20230122142845_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230124150643_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,27 @@ namespace RedSheetApp1.Migrations
                 .HasAnnotation("ProductVersion", "3.1.32")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("RedSheetApp1.Models.Keywords", b =>
+                {
+                    b.Property<int>("KeywordsID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("QuestionID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Word")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("KeywordsID");
+
+                    b.ToTable("Keywords");
+                });
 
             modelBuilder.Entity("RedSheetApp1.Models.Question", b =>
                 {

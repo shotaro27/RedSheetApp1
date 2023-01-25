@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace RedSheetApp1.Models
 {
-	public class Keyword
+	public class Keywords
 	{
-		public int Id { get; set; }
+		public int KeywordsID { get; set; }
+		public int QuestionID { get; set; }
 		[DataType(DataType.Date)]
 		public DateTime CreateDate { get; set; }
+		public string Word { get; set; }
 	}
 }
