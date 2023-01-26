@@ -39,20 +39,24 @@ namespace RedSheetApp1.Pages.Questions
             Question.CreateDate = DateTime.Now;
             Question.UpdateDate = DateTime.Now;
 
+
+            _context.Question.Add(Question);
+            await _context.SaveChangesAsync();
+            var id = Question.QuestionID;
+
             foreach (var word in Question.ExtractKeywords())
             {
                 var Keyword = new Keywords
                 {
-                    QuestionID = Question.QuestionID,
+                    QuestionID = id,
                     Word = word,
                     CreateDate = DateTime.Now
                 };
                 _context.Keywords.Add(Keyword);
             }
 
-            _context.Question.Add(Question);
             await _context.SaveChangesAsync();
-
+            
             return RedirectToPage("./Index");
         }
     }

@@ -47,6 +47,12 @@ namespace RedSheetApp1.Pages.Questions
 
             Question = await _context.Question.FindAsync(id);
 
+            var removeKeywords = _context.Keywords.Where(k => k.QuestionID == Question.QuestionID).ToArray();
+            _context.Keywords.RemoveRange(removeKeywords);
+
+            removeKeywords = _context.Keywords.Where(k => !_context.Question.Any(q => q.QuestionID == k.QuestionID)).ToArray();
+            _context.Keywords.RemoveRange(removeKeywords);
+
             if (Question != null)
             {
                 _context.Question.Remove(Question);
