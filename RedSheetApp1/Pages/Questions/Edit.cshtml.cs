@@ -13,15 +13,18 @@ namespace RedSheetApp1.Pages.Questions
 {
     public class EditModel : PageModel
     {
-        private readonly RedSheetApp1.Data.RedSheetApp1Context _context;
+        private readonly RedSheetApp1Context _context;
 
-        public EditModel(RedSheetApp1.Data.RedSheetApp1Context context)
+        public EditModel(RedSheetApp1Context context)
         {
             _context = context;
         }
 
         [BindProperty]
         public Question Question { get; set; }
+
+        [BindProperty]
+        public List<Keywords> Keywords { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -31,6 +34,8 @@ namespace RedSheetApp1.Pages.Questions
             }
 
             Question = await _context.Question.FirstOrDefaultAsync(m => m.QuestionID == id);
+
+            Keywords = await _context.Keywords.Where(k => k.QuestionID == id).ToListAsync();
 
             if (Question == null)
             {
@@ -49,9 +54,26 @@ namespace RedSheetApp1.Pages.Questions
             }
 
             _context.Attach(Question).State = EntityState.Modified;
+            Question.UpdateDate = DateTime.Now;
 
             try
             {
+                await _context.SaveChangesAsync();
+                var removeKeywords = _context.Keywords.Where(k => k.QuestionID == Question.QuestionID).ToArray();
+                _context.Keywords.RemoveRange(removeKeywords);
+                var id = Question.QuestionID;
+
+                foreach (var word in Question.ExtractKeywords())
+                {
+                    var Keyword = new Keywords
+                    {
+                        QuestionID = id,
+                        Word = word,
+                        CreateDate = DateTime.Now
+                    };
+                    _context.Keywords.Add(Keyword);
+                }
+
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
