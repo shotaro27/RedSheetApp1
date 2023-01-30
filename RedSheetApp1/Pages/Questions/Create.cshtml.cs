@@ -50,6 +50,7 @@ namespace RedSheetApp1.Pages.Questions
                 {
                     QuestionID = id,
                     Word = word,
+                    RightOrWrong = false,
                     CreateDate = DateTime.Now
                 };
                 _context.Keywords.Add(Keyword);

@@ -44,9 +44,12 @@
                 @Html.DisplayFor(modelItem => item.Text)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.QuestionID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.QuestionID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.QuestionID">Delete</a>
+                <div class="btn-group btn-group-sm" role="group">
+                    <a asp-page="./Edit" asp-route-id="@item.QuestionID" class="btn btn-outline-success">Edit</a>
+                    <a asp-page="./Details" asp-route-id="@item.QuestionID" class="btn btn-outline-primary">Details</a>
+                    <a asp-page="./Delete" asp-route-id="@item.QuestionID" class="btn btn-outline-danger">Delete</a>
+                    <a asp-page="./RedSheet" asp-route-id="@item.QuestionID" class="btn btn-danger">Red Sheet!</a>
+                </div>
             </td>
         </tr>
 }

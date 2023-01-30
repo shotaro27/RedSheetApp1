@@ -1,0 +1,17 @@
+﻿@page
+@model RedSheetApp1.Pages.Questions.RedSheetModel
+@{
+	ViewData["Title"] = "Red Sheet!";
+}
+
+<h1>Red Sheet!</h1>
+
+<div>
+	@Html.Raw(Model.QString)
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+	$(document).on("click", ".redsheet", function (e) {
+		$(this).remove();
+	});
+</script>

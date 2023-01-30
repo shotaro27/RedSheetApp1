@@ -13,5 +13,6 @@ namespace RedSheetApp1.Models
 		[DataType(DataType.Date)]
 		public DateTime CreateDate { get; set; }
 		public string Word { get; set; }
+		public bool? RightOrWrong { get; set; }
 	}
 }
