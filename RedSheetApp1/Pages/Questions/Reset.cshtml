@@ -1,13 +1,12 @@
 ﻿@page
-@model RedSheetApp1.Pages.Questions.DetailsModel
+@model RedSheetApp1.Pages.Questions.ResetModel
 
 @{
-	ViewData["Title"] = "Details";
+	ViewData["Title"] = "リセット";
 }
 
 <div>
-	<h4>問題の詳細</h4>
-	<hr />
+	<h4>この問題をリセットしてもよろしいですか？</h4>
 	<dl class="row">
 		<dt class="col-sm-2">
 			進行度
@@ -39,35 +38,10 @@
 			@Html.DisplayFor(model => model.Question.Text)
 		</dd>
 	</dl>
-</div>
-<div>
-	<table class="table">
-		<thead>
-			<tr>
-				<th>
-					キーワード
-				</th>
-				<th>
-					正否
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var item in Model.Keywords)
-			{
-				<tr>
-					<td>
-						@Html.DisplayFor(modelItem => item.Word)
-					</td>
-					<td>
-						@(item.RightOrWrong ?? false ? "○" : "×")
-					</td>
-				</tr>
-			}
-		</tbody>
-	</table>
-</div>
-<div>
-	<a asp-page="./Edit" asp-route-id="@Model.Question.QuestionID">Edit</a> |
-	<a asp-page="./Index">Back to List</a>
+
+	<form method="post">
+		<input type="hidden" asp-for="Question.QuestionID" />
+		<input type="submit" value="リセット" class="btn btn-secondary" /> |
+		<a asp-page="./Index">一覧に戻る</a>
+	</form>
 </div>

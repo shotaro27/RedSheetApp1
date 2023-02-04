@@ -20,6 +20,8 @@ namespace RedSheetApp1.Pages.Questions
         }
 
         public Question Question { get; set; }
+        public QuestionSet QuestionSet { get; set; }
+        public IList<Keywords> Keywords { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,10 +32,15 @@ namespace RedSheetApp1.Pages.Questions
 
             Question = await _context.Question.FirstOrDefaultAsync(m => m.QuestionID == id);
 
-            if (Question == null)
+            Keywords = await _context.Keywords.Where(k => k.QuestionID == id).ToListAsync();
+
+            if (Question == null || Keywords == null)
             {
                 return NotFound();
             }
+
+            QuestionSet = new QuestionSet(Question, Keywords);
+
             return Page();
         }
     }

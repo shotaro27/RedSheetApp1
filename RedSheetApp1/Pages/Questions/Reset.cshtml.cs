@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,11 +10,11 @@ using RedSheetApp1.Models;
 
 namespace RedSheetApp1.Pages.Questions
 {
-    public class DeleteModel : PageModel
+    public class ResetModel : PageModel
     {
         private readonly RedSheetApp1Context _context;
 
-        public DeleteModel(RedSheetApp1Context context)
+        public ResetModel(RedSheetApp1Context context)
         {
             _context = context;
         }
@@ -52,19 +52,13 @@ namespace RedSheetApp1.Pages.Questions
                 return NotFound();
             }
 
-            Question = await _context.Question.FindAsync(id);
-
-            var removeKeywords = _context.Keywords.Where(k => k.QuestionID == Question.QuestionID).ToArray();
-            _context.Keywords.RemoveRange(removeKeywords);
-
-            removeKeywords = _context.Keywords.Where(k => !_context.Question.Any(q => q.QuestionID == k.QuestionID)).ToArray();
-            _context.Keywords.RemoveRange(removeKeywords);
-
-            if (Question != null)
+            Keywords = await _context.Keywords.Where(k => k.QuestionID == id).ToListAsync();
+            foreach (var keyword in Keywords)
             {
-                _context.Question.Remove(Question);
-                await _context.SaveChangesAsync();
+                keyword.RightOrWrong = false;
             }
+            
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }

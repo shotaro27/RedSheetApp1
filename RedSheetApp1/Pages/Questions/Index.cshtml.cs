@@ -12,20 +12,25 @@ namespace RedSheetApp1.Pages.Questions
 {
     public class IndexModel : PageModel
     {
-        private readonly RedSheetApp1.Data.RedSheetApp1Context _context;
+        private readonly RedSheetApp1Context _context;
 
-        public IndexModel(RedSheetApp1.Data.RedSheetApp1Context context)
+        public IndexModel(RedSheetApp1Context context)
         {
             _context = context;
         }
 
         public IList<Question> Question { get;set; }
+        public IList<QuestionSet> QuestionSets { get; set; }
         public IList<Keywords> Keywords { get; set; }
 
         public async Task OnGetAsync()
         {
             Question = await _context.Question.ToListAsync();
             Keywords = await _context.Keywords.ToListAsync();
+            QuestionSets = Question.Select(q => new QuestionSet(q, Keywords)).OrderBy(s => s.Progress).ToList();
         }
+
+        public double GetQuestionProgress(Question Question, IList<Keywords> Keywords)
+            => Keywords.Where(k => k.QuestionID == Question.QuestionID).Select(k => k.RightOrWrong ?? false ? 1 : 0).Average();
     }
 }
