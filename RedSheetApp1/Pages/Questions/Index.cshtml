@@ -67,6 +67,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Keywords[0].Word)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Keywords[0].RightOrWrong)
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -81,6 +84,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Word)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RightOrWrong)
                 </td>
             </tr>
         }
