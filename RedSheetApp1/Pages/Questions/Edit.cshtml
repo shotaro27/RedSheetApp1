@@ -2,33 +2,36 @@
 @model RedSheetApp1.Pages.Questions.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "編集";
 }
 
-<h1>Edit</h1>
-
-<h4>Question</h4>
+<h4>編集</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Question.QuestionID" />
             <input type="hidden" asp-for="Question.CreateDate" />
             <div class="form-group">
-                <label asp-for="Question.Text" class="control-label"></label>
-                <input asp-for="Question.Text" class="form-control" />
+                <label asp-for="Question.Title" class="control-label">タイトル</label>
+                <input asp-for="Question.Title" class="form-control" />
+                <span asp-validation-for="Question.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Question.Text" class="control-label">内容</label>
+                <textarea asp-for="Question.Text" class="form-control"></textarea>
                 <span asp-validation-for="Question.Text" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="保存" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Index">一覧に戻る</a>
 </div>
 
 @section Scripts {

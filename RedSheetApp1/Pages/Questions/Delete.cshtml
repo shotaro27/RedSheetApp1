@@ -6,7 +6,9 @@
 }
 
 <div>
-    <h4>この問題を削除してもよろしいですか？</h4>
+    <h3>この問題を削除してもよろしいですか？</h3>
+    <h4>@Html.DisplayFor(modelItem => modelItem.Question.Title)</h4>
+    <hr />
     <dl class="row">
         <dt class="col-sm-2">
             進行度
@@ -38,7 +40,7 @@
             @Html.DisplayFor(model => model.Question.Text)
         </dd>
     </dl>
-    
+
     <form method="post">
         <input type="hidden" asp-for="Question.QuestionID" />
         <input type="submit" value="削除" class="btn btn-danger" /> |

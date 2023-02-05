@@ -2,33 +2,38 @@
 @model RedSheetApp1.Pages.Questions.CreateModel
 
 @{
-    ViewData["Title"] = "Create";
+	ViewData["Title"] = "新規作成";
 }
 
-<h1>Create</h1>
-
-<h4>Question</h4>
+<h4>新規問題作成</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Question.Text" class="control-label"></label>
-                <input asp-for="Question.Text" class="form-control" />
-                <span asp-validation-for="Question.Text" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+	<div class="col-md-8">
+		<form method="post">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+				<label asp-for="Question.Title" class="control-label">タイトル</label>
+				<input asp-for="Question.Title" class="form-control" />
+				<span asp-validation-for="Question.Title" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Question.Text" class="control-label">内容</label>
+				<textarea asp-for="Question.Text" class="form-control"></textarea>
+				<span asp-validation-for="Question.Text" class="text-danger"></span>
+				<a asp-page="./CropImage">画像から抽出する</a>
+			</div>
+			<div class="form-group">
+				<input type="submit" value="作成" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+	<a asp-page="Index">一覧に戻る</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

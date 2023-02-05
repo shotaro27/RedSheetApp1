@@ -5,8 +5,10 @@
 	ViewData["Title"] = "Details";
 }
 
+<h1>問題の詳細</h1>
+
 <div>
-	<h4>問題の詳細</h4>
+	<h4>@Html.DisplayFor(modelItem => modelItem.Question.Title)</h4>
 	<hr />
 	<dl class="row">
 		<dt class="col-sm-2">
@@ -41,33 +43,49 @@
 	</dl>
 </div>
 <div>
-	<table class="table">
-		<thead>
-			<tr>
-				<th>
-					キーワード
-				</th>
-				<th>
-					正否
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var item in Model.Keywords)
-			{
+	<form method="post">
+		<input type="hidden" name="qid" value="@Model.Question.QuestionID" />
+		<table class="table">
+			<thead>
+				<tr>
+					<th>
+						キーワード
+					</th>
+					<th>
+						正否
+					</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model.Keywords)
+				{
+					<tr>
+						<td>
+							@Html.DisplayFor(modelItem => item.Word)
+						</td>
+						<td>
+							@(item.RightOrWrong ?? false ? "○" : "×")
+						</td>
+						<td>
+							<a asp-page="./DeleteKeyword" asp-route-id="@item.KeywordsID" asp-route-qid="@Model.Question.QuestionID" class="btn btn-outline-danger">削除</a>
+						</td>
+					</tr>
+				}
 				<tr>
 					<td>
-						@Html.DisplayFor(modelItem => item.Word)
+						<input asp-for="NewWord.Word" class="form-control" />
 					</td>
+					<td></td>
 					<td>
-						@(item.RightOrWrong ?? false ? "○" : "×")
+						<input type="submit" class="btn btn-outline-primary" value="追加" />
 					</td>
 				</tr>
-			}
-		</tbody>
-	</table>
+			</tbody>
+		</table>
+	</form>
 </div>
 <div>
-	<a asp-page="./Edit" asp-route-id="@Model.Question.QuestionID">Edit</a> |
-	<a asp-page="./Index">Back to List</a>
+	<a asp-page="./Edit" asp-route-id="@Model.Question.QuestionID">編集</a> |
+	<a asp-page="./Index">一覧に戻る</a>
 </div>

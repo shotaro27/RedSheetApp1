@@ -23,6 +23,9 @@ namespace RedSheetApp1.Pages.Questions
         public QuestionSet QuestionSet { get; set; }
         public IList<Keywords> Keywords { get; set; }
 
+        [BindProperty]
+        public Keywords NewWord { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -42,6 +45,32 @@ namespace RedSheetApp1.Pages.Questions
             QuestionSet = new QuestionSet(Question, Keywords);
 
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync(int? qid)
+        {
+            Question = await _context.Question.FirstOrDefaultAsync(m => m.QuestionID == qid);
+
+            Keywords = await _context.Keywords.Where(k => k.QuestionID == qid).ToListAsync();
+
+            if (Question == null || Keywords == null)
+            {
+                return NotFound();
+            }
+
+            if (!Question.Text.Contains(NewWord.Word) || Keywords.Select(k => k.Word).Contains(NewWord.Word))
+            {
+                return Redirect($"./Details?id={qid}");
+            }
+
+            NewWord.QuestionID = qid ?? 0;
+            NewWord.RightOrWrong = false;
+            NewWord.CreateDate = DateTime.Now;
+            _context.Keywords.Add(NewWord);
+
+            await _context.SaveChangesAsync();
+
+            return Redirect($"./Details?id={qid}");
         }
     }
 }

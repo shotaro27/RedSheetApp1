@@ -17,6 +17,7 @@ namespace RedSheetApp1.Models
         [DataType(DataType.Date)]
         public DateTime UpdateDate { get; set; }
         public string Text { get; set; }
+        public string Title { get; set; }
 
         static readonly string endpoint = "https://redsheet.cognitiveservices.azure.com/";
         static readonly string subscriptionKey = "ff767535093e42d68e8ea7b016ae52bd";

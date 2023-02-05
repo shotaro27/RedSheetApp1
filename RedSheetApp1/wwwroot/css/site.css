@@ -121,3 +121,22 @@ body {
     color: var(--warning);
     cursor: pointer;
 }
+
+.question-content {
+    overflow: hidden;
+    table-layout: fixed;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.w-10 {
+    width: 10% !important;
+}
+
+.w-30 {
+    width: 30% !important;
+}
+
+.img-container img {
+    max-width: 100%;
+}

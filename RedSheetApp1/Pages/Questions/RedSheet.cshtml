@@ -6,20 +6,28 @@
 
 <h1>Red Sheet!</h1>
 
-<form method="post">
-	<div name="question" class="card">
-		<div class="card-body">
-			@Html.Raw(Model.QString)
+<div>
+	<h4>@Html.DisplayFor(modelItem => modelItem.Question.Title)</h4>
+	<hr />
+	<form method="post">
+		<div name="question" class="card">
+			<div class="card-body">
+				@Html.Raw(Model.QString)
+			</div>
 		</div>
-	</div>
-	<br />
-	<input type='hidden' asp-for="Question.QuestionID" name='id'>
-	<input type='hidden' id="q-msg" name='msg'>
-	<div>
-		<button type='submit' class='btn btn-primary send' disabled>Done</button>
-	</div>
-</form>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+		<br />
+		<input type='hidden' asp-for="Question.QuestionID" name='id'>
+		<input type='hidden' id="q-msg" name='msg'>
+		<div class="form-group">
+			<input type="submit" value="完了" disabled class="send btn btn-primary" />
+		</div>
+	</form>
+</div>
+
+<div>
+	<a asp-page="Index">一覧に戻る</a>
+</div>
+
 <script>
 
 	$(document).on("click", ".redsheet", function (e) {

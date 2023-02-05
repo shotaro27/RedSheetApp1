@@ -21,6 +21,11 @@ namespace RedSheetApp1.Pages.Questions
 
         public IActionResult OnGet()
         {
+            Question = new Question();
+            if (TempData["Text"] != null)
+            {
+                Question.Text = TempData["Text"].ToString();
+            }
             return Page();
         }
 
@@ -31,9 +36,14 @@ namespace RedSheetApp1.Pages.Questions
         // more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || string.IsNullOrEmpty(Question.Text))
             {
                 return Page();
+            }
+
+            if (string.IsNullOrEmpty(Question.Title))
+            {
+                Question.Title = "Untitled";
             }
 
             Question.CreateDate = DateTime.Now;

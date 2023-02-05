@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.AI.TextAnalytics" Version="5.2.0" />
+    <PackageReference Include="Microsoft.Azure.CognitiveServices.Vision.ComputerVision" Version="7.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.32" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.32">
       <PrivateAssets>all</PrivateAssets>
@@ -16,6 +17,18 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\lib\cropper\cropper.css">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>cropper.scss</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\lib\cropper\cropper.scss">
+      <Generator>SassTranspiler</Generator>
+      <LastGenOutput>cropper.css</LastGenOutput>
+    </Content>
   </ItemGroup>
 
 </Project>

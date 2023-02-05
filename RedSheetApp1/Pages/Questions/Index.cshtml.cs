@@ -29,8 +29,5 @@ namespace RedSheetApp1.Pages.Questions
             Keywords = await _context.Keywords.ToListAsync();
             QuestionSets = Question.Select(q => new QuestionSet(q, Keywords)).OrderBy(s => s.Progress).ToList();
         }
-
-        public double GetQuestionProgress(Question Question, IList<Keywords> Keywords)
-            => Keywords.Where(k => k.QuestionID == Question.QuestionID).Select(k => k.RightOrWrong ?? false ? 1 : 0).Average();
     }
 }

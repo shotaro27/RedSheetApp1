@@ -58,23 +58,9 @@ namespace RedSheetApp1.Pages.Questions
 
             try
             {
-                await _context.SaveChangesAsync();
-                var removeKeywords = _context.Keywords.Where(k => k.QuestionID == Question.QuestionID).ToArray();
-                _context.Keywords.RemoveRange(removeKeywords);
                 var id = Question.QuestionID;
-
-                foreach (var word in Question.ExtractKeywords())
-                {
-                    var Keyword = new Keywords
-                    {
-                        QuestionID = id,
-                        Word = word,
-                        RightOrWrong = false,
-                        CreateDate = DateTime.Now
-                    };
-                    _context.Keywords.Add(Keyword);
-                }
-
+                var removeKeywords = await _context.Keywords.Where(k => k.QuestionID == id && !Question.Text.Contains(k.Word)).ToListAsync();
+                _context.RemoveRange(removeKeywords);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
