@@ -1,0 +1,45 @@
+﻿@page
+@model RedSheetApp1.Pages.Questions.TextEditModel
+@{
+	ViewData["Title"] = "画像から抽出する";
+}
+
+<h4>テキスト</h4>
+<hr />
+<div class="row">
+	<div class="col-md-8">
+		<form method="post">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+				誤差
+				<input type="range" class="form-range" id="range" min="0" max="20" step="1" value="12">
+				<span id="valuetext">12</span>
+				<br />
+				<input type="hidden" id="question-text" name="text" value="@Model.Text">
+				<span id="text">@Model.Text</span>
+			</div>
+			<div class="form-group">
+				<input type="submit" value="作成" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+	const GetSize = (line) => Math.sqrt(Math.pow(line.boundingBox[6] - line.boundingBox[0], 2)
+		+ Math.pow(line.boundingBox[7] - line.boundingBox[1], 2));
+
+	const range = $('#range');
+	const valtext = $('#valuetext');
+	const text = $('#text');
+	const questiontext = $('#question-text');
+	const linetext = '@Html.Raw(Model.LineText.Replace("'", "\\'"))';
+	const lines = JSON.parse(linetext);
+	const size = lines.map(GetSize).reduce((acc, cur) => acc + cur) / lines.length;
+	range.on("input", (e) => {
+		const qtext = lines.filter(line => size - GetSize(line) <= range.val()).map(line => line.text).join("");
+		text.html(qtext);
+		questiontext.val(qtext);
+		valtext.html(range.val());
+	});
+</script>

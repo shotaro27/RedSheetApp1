@@ -13,6 +13,10 @@ namespace RedSheetApp1.Pages.Questions
     public class CreateModel : PageModel
     {
         private readonly RedSheetApp1Context _context;
+        public static Question CurrentQuestion { get; set; }
+
+        [BindProperty]
+        public Question Question { get; set; }
 
         public CreateModel(RedSheetApp1Context context)
         {
@@ -21,21 +25,28 @@ namespace RedSheetApp1.Pages.Questions
 
         public IActionResult OnGet()
         {
-            Question = new Question();
             if (TempData["Text"] != null)
             {
+                Question = CurrentQuestion;
                 Question.Text = TempData["Text"].ToString();
+            }
+            else
+            {
+                Question = new Question();
             }
             return Page();
         }
 
-        [BindProperty]
-        public Question Question { get; set; }
-
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string send)
         {
+            if (send == "cropimage")
+            {
+                CurrentQuestion = Question;
+                return RedirectToPage("./CropImage");
+            }
+
             if (!ModelState.IsValid || string.IsNullOrEmpty(Question.Text))
             {
                 return Page();

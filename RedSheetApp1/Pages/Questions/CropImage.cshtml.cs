@@ -16,14 +16,10 @@ namespace RedSheetApp1.Pages.Questions
 {
     public class CropImageModel : PageModel
     {
-        private readonly RedSheetApp1Context _context;
         static readonly string endpoint = "https://redsheet.cognitiveservices.azure.com/";
         static readonly string subscriptionKey = "ff767535093e42d68e8ea7b016ae52bd";
 
-        public CropImageModel(RedSheetApp1Context context)
-        {
-            _context = context;
-        }
+        public static IList<Line> TextData { get; set; }
 
         public IActionResult OnGet()
         {
@@ -32,14 +28,18 @@ namespace RedSheetApp1.Pages.Questions
 
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync(string imgurl)
+        public async Task<IActionResult> OnPostAsync(string send, string imgurl)
         {
+            if (send == "back")
+            {
+                TempData["Text"] = CreateModel.CurrentQuestion.Text;
+                return RedirectToPage("./Create");
+            }
+
             var visionClient = AuthenticateComputerVision(endpoint, subscriptionKey);
-            var text = await ReadFileUrlAsync(visionClient, imgurl);
+            TextData = await ReadFileUrlAsync(visionClient, imgurl);
 
-            TempData["Text"] = text;
-
-            return RedirectToPage("./Create");
+            return RedirectToPage("./TextEdit");
         }
 
         public static ComputerVisionClient AuthenticateComputerVision(string endpoint, string key)
@@ -48,13 +48,13 @@ namespace RedSheetApp1.Pages.Questions
             { Endpoint = endpoint };
         }
 
-        public static async Task<string> ReadFileUrlAsync(ComputerVisionClient client, string fileUrl)
+        public static async Task<IList<Line>> ReadFileUrlAsync(ComputerVisionClient client, string fileUrl)
         {
             var textHeaders = await client.ReadInStreamAsync(Base64ToImage(fileUrl));
             return await ExtractReadResultAsync(client, textHeaders.OperationLocation, fileUrl);
         }
 
-        public static async Task<string> ExtractReadResultAsync(ComputerVisionClient client, string operationLocation, string filePath)
+        public static async Task<IList<Line>> ExtractReadResultAsync(ComputerVisionClient client, string operationLocation, string filePath)
         {
             const int numberOfCharsInOperationId = 36;
             var operationId = operationLocation.Substring(operationLocation.Length - numberOfCharsInOperationId);
@@ -72,7 +72,7 @@ namespace RedSheetApp1.Pages.Questions
             // Display the found text.
             Console.WriteLine();
             var textUrlFileResults = results.AnalyzeResult.ReadResults;
-            return string.Join("", textUrlFileResults[0].Lines.Select(l => l.Text));
+            return textUrlFileResults[0].Lines;
         }
 
         public static Stream Base64ToImage(string imageURL)
