@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace RedSheetApp1.Pages.Questions
         public Question Question { get; set; }
         public QuestionSet QuestionSet { get; set; }
         public IList<Keywords> Keywords { get; set; }
+        public string QString { get; set; }
 
         [BindProperty]
         public Keywords NewWord { get; set; }
@@ -40,6 +42,18 @@ namespace RedSheetApp1.Pages.Questions
             if (Question == null || Keywords == null)
             {
                 return NotFound();
+            }
+
+            QString = HttpUtility.HtmlEncode(Question.Text);
+
+            foreach (var keyword in Keywords)
+            {
+                var appendText = $"<span class='keyword-parent keyword-{(keyword.RightOrWrong ?? false ? "right" : "wrong")}' keyword-id='{keyword.KeywordsID}'>"
+                    + $"<a class='keyword'>{keyword.Word}</a>"
+                    + $"<div class='redsheet-option' role='group'>"
+                    + $"<a class='keyword-delete' href='./DeleteKeyword?id={keyword.KeywordsID}&qid={id}'>削除</a>"
+                    + "</div></span>";
+                QString = QString.Replace(keyword.Word, appendText);
             }
 
             QuestionSet = new QuestionSet(Question, Keywords);

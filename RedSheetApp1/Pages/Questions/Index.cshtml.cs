@@ -27,7 +27,7 @@ namespace RedSheetApp1.Pages.Questions
         {
             Question = await _context.Question.ToListAsync();
             Keywords = await _context.Keywords.ToListAsync();
-            QuestionSets = Question.Select(q => new QuestionSet(q, Keywords)).OrderBy(s => s.Progress).ToList();
+            QuestionSets = Question.Select(q => new QuestionSet(q, Keywords)).OrderByDescending(s => s.Question.UpdateDate).ToList();
         }
     }
 }

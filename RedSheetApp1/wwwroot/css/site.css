@@ -98,7 +98,7 @@ body {
 .redsheet-right {
     color: var(--light);
     background-color: var(--primary);
-    font-size: 0.5em;
+    font-size: 0.7em;
     padding: 0 0.5em;
     border: 1px var(--light);
     border-radius: 10% 0 0 10%;
@@ -107,10 +107,19 @@ body {
 .redsheet-wrong {
     color: var(--light);
     background-color: var(--secondary);
-    font-size: 0.5em;
+    font-size: 0.7em;
     padding: 0 0.5em;
     border: 1px var(--light);
     border-radius: 0 10% 10% 0;
+}
+
+.keyword-delete {
+    color: var(--light) !important;
+    background-color: var(--danger);
+    font-size: 1em;
+    padding: 0 0.5em;
+    border: 1px var(--light);
+    border-radius: 10%;
 }
 
 .btn-check {
@@ -133,10 +142,30 @@ body {
     width: 10% !important;
 }
 
+.w-20 {
+    width: 20% !important;
+}
+
 .w-30 {
     width: 30% !important;
 }
 
 .img-container img {
     max-width: 100%;
+}
+
+.keyword-wrong {
+    background: linear-gradient(transparent 40%, #f006 80%)
+}
+
+.keyword-right {
+    background: linear-gradient(transparent 40%, #0f06 80%)
+}
+
+.keyword:hover {
+    cursor: pointer;
+}
+
+.keyword-parent {
+    position: relative;
 }

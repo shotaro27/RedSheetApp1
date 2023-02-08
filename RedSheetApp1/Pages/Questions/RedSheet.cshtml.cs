@@ -37,10 +37,6 @@ namespace RedSheetApp1.Pages.Questions
             {
                 return NotFound();
             }
-            if (id == null)
-            {
-                return NotFound();
-            }
 
             Question = await _context.Question.FirstOrDefaultAsync(m => m.QuestionID == id);
 
@@ -104,12 +100,18 @@ namespace RedSheetApp1.Pages.Questions
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(string msg)
+        public async Task<IActionResult> OnPostAsync(string send, string msg, int id)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
+
+            if (string.IsNullOrEmpty(msg))
+            {
+                return Route(send, id);
+            }
+
             var sets = msg.Split("|");
             foreach (var set in sets.Take(sets.Length - 1))
             {
@@ -120,7 +122,16 @@ namespace RedSheetApp1.Pages.Questions
 
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return Route(send, id);
+        }
+        public IActionResult Route(string send, int id)
+        {
+            if (send == "replay")
+            {
+                return Redirect($"./RedSheet?id={id}");
+            }
+
+            return Redirect($"./Details?id={id}");
         }
     }
 }

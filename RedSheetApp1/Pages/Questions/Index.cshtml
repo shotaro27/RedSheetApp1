@@ -12,6 +12,9 @@
     <thead class="w-100">
         <tr class="w-100">
             <th class="w-10">
+                更新日
+            </th>
+            <th class="w-20">
                 タイトル
             </th>
             <th class="w-10">
@@ -20,14 +23,19 @@
             <th class="w-50">
                 内容
             </th>
-            <th class="w-30"></th>
+            <th class="w-10"></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model.QuestionSets) {
         <tr>
             <td class="w-10">
-                @Html.DisplayFor(modelItem => item.Question.Title)
+                @Html.DisplayFor(modelItem => item.Question.UpdateDate)
+            </td>
+            <td class="w-20">
+                <div class="question-content">
+                    @Html.DisplayFor(modelItem => item.Question.Title)
+                </div>
             </td>
             <td class="w-10">
                 <div class="progress">
@@ -42,14 +50,8 @@
                     @Html.DisplayFor(modelItem => item.Question.Text)
                 </div>
             </td>
-            <td class="w-30">
-                <div class="btn-group btn-group-sm" role="group">
-                    <a asp-page="./Edit" asp-route-id="@item.Question.QuestionID" class="btn btn-outline-success">編集</a>
-                    <a asp-page="./Details" asp-route-id="@item.Question.QuestionID" class="btn btn-outline-info">詳細</a>
-                    <a asp-page="./Reset" asp-route-id="@item.Question.QuestionID" class="btn btn-outline-secondary">リセット</a>
-                    <a asp-page="./Delete" asp-route-id="@item.Question.QuestionID" class="btn btn-outline-danger">削除</a>
-                    <a asp-page="./RedSheet" asp-route-id="@item.Question.QuestionID" class="btn btn-danger">Red Sheet!</a>
-                </div>
+            <td class="w-10">
+                <a asp-page="./Details" asp-route-id="@item.Question.QuestionID" class="btn btn-outline-info">詳細</a>
             </td>
         </tr>
 }

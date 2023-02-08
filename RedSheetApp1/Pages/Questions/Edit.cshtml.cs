@@ -55,10 +55,10 @@ namespace RedSheetApp1.Pages.Questions
 
             _context.Attach(Question).State = EntityState.Modified;
             Question.UpdateDate = DateTime.Now;
+            var id = Question.QuestionID;
 
             try
             {
-                var id = Question.QuestionID;
                 var removeKeywords = await _context.Keywords.Where(k => k.QuestionID == id && !Question.Text.Contains(k.Word)).ToListAsync();
                 _context.RemoveRange(removeKeywords);
                 await _context.SaveChangesAsync();
@@ -75,7 +75,7 @@ namespace RedSheetApp1.Pages.Questions
                 }
             }
 
-            return RedirectToPage("./Index");
+            return Redirect($"./Details?id={id}");
         }
 
         private bool QuestionExists(int id)

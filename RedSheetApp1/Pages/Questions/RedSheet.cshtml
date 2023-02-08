@@ -19,13 +19,14 @@
 		<input type='hidden' asp-for="Question.QuestionID" name='id'>
 		<input type='hidden' id="q-msg" name='msg'>
 		<div class="form-group">
-			<input type="submit" value="完了" disabled class="send btn btn-primary" />
+			<button type="submit" name="send" value="done" class="send btn btn-primary">完了</button>
+			<button type="submit" name="send" value="replay" class="send btn btn-success">↺</button>
 		</div>
 	</form>
 </div>
 
 <div>
-	<a asp-page="Index">一覧に戻る</a>
+	<a asp-page="Details" asp-route-id="@Model.Question.QuestionID">詳細に戻る</a>
 </div>
 
 <script>
@@ -52,15 +53,12 @@
 	});
 
 	$('.redsheet-option').change(() => {
-		let flag = false;
 		let msg = "";
 		$('.redsheet-option').each((index, element) => {
-			flag = flag | !$(element).prop("check-complete");
 			msg += $(element).parent().attr("keyword-id") + ",";
 			msg += $(element).children('input:checked').val() + "|";
 			console.log($(element).prop("check-complete"));
 		});
 		$('#q-msg').val(msg);
-		$('.send').prop("disabled", flag);
 	});
 </script>

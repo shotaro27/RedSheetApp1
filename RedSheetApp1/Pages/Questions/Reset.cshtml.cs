@@ -60,7 +60,7 @@ namespace RedSheetApp1.Pages.Questions
             
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return Redirect($"./Details?id={id}");
         }
     }
 }

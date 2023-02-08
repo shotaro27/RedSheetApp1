@@ -8,7 +8,18 @@
 <h1>問題の詳細</h1>
 
 <div>
-	<h4>@Html.DisplayFor(modelItem => modelItem.Question.Title)</h4>
+	<div class="row">
+		<div class="col-md-6 col-sm-12">
+			<h4>@Html.DisplayFor(modelItem => modelItem.Question.Title)</h4>
+		</div>
+		<div class="col-md-6 col-sm-12 btn-group btn-group-sm" role="group">
+			<a asp-page="./Index" class="btn btn-secondary">一覧に戻る</a>
+			<a asp-page="./Edit" asp-route-id="@Model.Question.QuestionID" class="btn btn-outline-success">編集</a>
+			<a asp-page="./Reset" asp-route-id="@Model.Question.QuestionID" class="btn btn-outline-secondary">リセット</a>
+			<a asp-page="./Delete" asp-route-id="@Model.Question.QuestionID" class="btn btn-outline-danger">削除</a>
+			<a asp-page="./RedSheet" asp-route-id="@Model.Question.QuestionID" class="btn btn-danger">Red Sheet!</a>
+		</div>
+	</div>
 	<hr />
 	<dl class="row">
 		<dt class="col-sm-2">
@@ -38,7 +49,7 @@
 			内容
 		</dt>
 		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.Question.Text)
+			@Html.Raw(Model.QString)
 		</dd>
 	</dl>
 </div>
@@ -58,6 +69,15 @@
 				</tr>
 			</thead>
 			<tbody>
+				<tr>
+					<td>
+						<input asp-for="NewWord.Word" class="form-control" />
+					</td>
+					<td></td>
+					<td>
+						<input type="submit" class="btn btn-outline-primary" value="追加" />
+					</td>
+				</tr>
 				@foreach (var item in Model.Keywords)
 				{
 					<tr>
@@ -68,24 +88,18 @@
 							@(item.RightOrWrong ?? false ? "○" : "×")
 						</td>
 						<td>
-							<a asp-page="./DeleteKeyword" asp-route-id="@item.KeywordsID" asp-route-qid="@Model.Question.QuestionID" class="btn btn-outline-danger">削除</a>
+							<a id="delete-@item.KeywordsID" asp-page="./DeleteKeyword" asp-route-id="@item.KeywordsID" asp-route-qid="@Model.Question.QuestionID" class="btn btn-outline-danger">削除</a>
 						</td>
 					</tr>
 				}
-				<tr>
-					<td>
-						<input asp-for="NewWord.Word" class="form-control" />
-					</td>
-					<td></td>
-					<td>
-						<input type="submit" class="btn btn-outline-primary" value="追加" />
-					</td>
-				</tr>
 			</tbody>
 		</table>
 	</form>
 </div>
-<div>
-	<a asp-page="./Edit" asp-route-id="@Model.Question.QuestionID">編集</a> |
-	<a asp-page="./Index">一覧に戻る</a>
-</div>
+
+<script>
+	$(document).on("click", ".keyword", function (e) {
+		const option = $(this).parent().children(".redsheet-option");
+		option.css("display", option.css("display") == "none" ? "block" : "none");
+	});
+</script>

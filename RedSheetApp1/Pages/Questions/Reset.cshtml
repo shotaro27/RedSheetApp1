@@ -44,6 +44,6 @@
 	<form method="post">
 		<input type="hidden" asp-for="Question.QuestionID" />
 		<input type="submit" value="リセット" class="btn btn-secondary" /> |
-		<a asp-page="./Index">一覧に戻る</a>
+		<a asp-page="Details" asp-route-id="@Model.Question.QuestionID">詳細に戻る</a>
 	</form>
 </div>
