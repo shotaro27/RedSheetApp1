@@ -155,11 +155,18 @@ body {
 }
 
 .keyword-wrong {
-    background: linear-gradient(transparent 40%, #f006 80%)
+    background: linear-gradient(transparent 40%, #f006 80%);
+    border: 1px solid #f006;
+}
+
+.keyword-edit {
+    background: linear-gradient(transparent 40%, #ff06 80%);
+    border: 1px solid #f606;
 }
 
 .keyword-right {
-    background: linear-gradient(transparent 40%, #0f06 80%)
+    background: linear-gradient(transparent 40%, #0f06 80%);
+    border: 1px solid #0f06;
 }
 
 .keyword:hover {
@@ -168,4 +175,10 @@ body {
 
 .keyword-parent {
     position: relative;
+}
+
+@media only screen and (max-width : 767px) {
+    .lite-editor {
+        font-size: 17px !important;
+    }
 }
