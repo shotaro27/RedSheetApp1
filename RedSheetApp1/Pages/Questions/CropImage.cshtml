@@ -48,16 +48,27 @@
 </div>
 
 <script>
+	const options = {
+		maxSizeMB: 1,
+		maxWidthOrHeight: 1920
+	};
+
 	function previewImage(obj) {
-		var fileReader = new FileReader();
-		fileReader.onload = (function () {
-			$('#image').attr("src", fileReader.result);
-		});
-		fileReader.readAsDataURL(obj.files[0]);
-		$("#cropbutton").prop("disabled", false);
+		imageCompression(obj.files[0], options)
+			.then(function (compressedFile) {
+				var fileReader = new FileReader();
+				fileReader.onload = (function () {
+					$('#image').attr("src", fileReader.result);
+				});
+				fileReader.readAsDataURL(compressedFile);
+				$("#cropbutton").prop("disabled", false);
+			})
+			.catch(function (error) {
+				console.log(error.message);
+			});
 	}
 
-	window.addEventListener('DOMContentLoaded', function () {
+	$(() => {
 		var image = document.getElementById('image');
 		var cropBoxData;
 		var canvasData;

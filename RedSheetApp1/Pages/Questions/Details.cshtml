@@ -53,49 +53,6 @@
 		</dd>
 	</dl>
 </div>
-<div>
-	<form method="post">
-		<input type="hidden" name="qid" value="@Model.Question.QuestionID" />
-		<table class="table">
-			<thead>
-				<tr>
-					<th>
-						キーワード
-					</th>
-					<th>
-						正否
-					</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>
-						<input asp-for="NewWord.Word" class="form-control" />
-					</td>
-					<td></td>
-					<td>
-						<input type="submit" class="btn btn-outline-primary" value="追加" />
-					</td>
-				</tr>
-				@foreach (var item in Model.Keywords)
-				{
-					<tr>
-						<td>
-							@Html.DisplayFor(modelItem => item.Word)
-						</td>
-						<td>
-							@(item.RightOrWrong ?? false ? "○" : "×")
-						</td>
-						<td>
-							<a id="delete-@item.KeywordsID" asp-page="./DeleteKeyword" asp-route-id="@item.KeywordsID" asp-route-qid="@Model.Question.QuestionID" class="btn btn-outline-danger">削除</a>
-						</td>
-					</tr>
-				}
-			</tbody>
-		</table>
-	</form>
-</div>
 
 <script>
 	$(document).on("click", ".keyword", function (e) {

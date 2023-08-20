@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -44,19 +45,14 @@ namespace RedSheetApp1.Pages.Questions
                 return NotFound();
             }
 
-            QString = HttpUtility.HtmlEncode(Question.Text);
+            QuestionSet = new QuestionSet(Question, Keywords);
 
-            foreach (var keyword in Keywords)
+            if (string.IsNullOrEmpty(Question.Text))
             {
-                var appendText = $"<span class='keyword-parent keyword-{(keyword.RightOrWrong ?? false ? "right" : "wrong")}' keyword-id='{keyword.KeywordsID}'>"
-                    + $"<a class='keyword'>{keyword.Word}</a>"
-                    + $"<div class='redsheet-option' role='group'>"
-                    + $"<a class='keyword-delete' href='./DeleteKeyword?id={keyword.KeywordsID}&qid={id}'>削除</a>"
-                    + "</div></span>";
-                QString = QString.Replace(keyword.Word, appendText);
+                return Page();
             }
 
-            QuestionSet = new QuestionSet(Question, Keywords);
+            QString = EditorUtil.AppendTag(Question.Text, Keywords.ToList());
 
             return Page();
         }

@@ -181,4 +181,17 @@ body {
     .lite-editor {
         font-size: 17px !important;
     }
+
+    input.form-control {
+        font-size: 17px;
+    }
+}
+
+html {
+    width: 100vw;
+}
+
+tr.focus-color:hover {
+    background: #cff6!important;
+    cursor: pointer;
 }

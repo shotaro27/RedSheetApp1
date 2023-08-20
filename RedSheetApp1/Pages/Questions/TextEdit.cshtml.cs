@@ -8,6 +8,7 @@ using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using RedSheetApp1.Models;
 
 namespace RedSheetApp1.Pages.Questions
 {
@@ -30,7 +31,20 @@ namespace RedSheetApp1.Pages.Questions
         }
         public IActionResult OnPost(string text)
         {
-            TempData["Text"] = CreateModel.CurrentQuestion.Text + text;
+            var question = CreateModel.CurrentQuestion;
+            question.Text += text;
+            foreach (var word in question.ExtractKeywords())
+            {
+                var Keyword = new Keywords
+                {
+                    Word = word,
+                    RightOrWrong = false,
+                    CreateDate = DateTime.Now
+                };
+                CreateModel.CurrentKeywords.Add(Keyword);
+            }
+
+            TempData["Text"] = question.Text;
 
             return RedirectToPage("./Create");
         }

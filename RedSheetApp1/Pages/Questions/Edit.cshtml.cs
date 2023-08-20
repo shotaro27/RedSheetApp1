@@ -47,13 +47,7 @@ namespace RedSheetApp1.Pages.Questions
                 return NotFound();
             }
 
-            QString = HttpUtility.HtmlEncode(Question.Text);
-
-            foreach (var keyword in Keywords.Select(k => k.Word))
-            {
-                var appendText = $"<span class=\"keyword-edit\">{keyword}</span>";
-                QString = QString.Replace(keyword, appendText);
-            }
+            QString = EditorUtil.AppendTag(Question.Text, Keywords);
 
             return Page();
         }
@@ -72,44 +66,19 @@ namespace RedSheetApp1.Pages.Questions
             var id = Question.QuestionID;
 
             Console.WriteLine(QString);
+            Console.WriteLine(Question.Text);
 
-            List<Keywords> newKeywords = new List<Keywords>();
+            Keywords = await _context.Keywords.Where(k => k.QuestionID == id).ToListAsync();
 
-            foreach (Match m in Regex.Matches(QString, "(?<=<span class=\"keyword-edit\">).+?(?=</span>)"))
-            {
-                Predicate<Keywords> matchKey = k => k.Word == m.Value;
-                if (Keywords.Exists(matchKey))
-                {
-                    var keyword = Keywords.Find(matchKey);
-                    newKeywords.Add(keyword);
-                }
-                else if (newKeywords.Exists(matchKey) || m.Length == 0)
-                {
-                    Console.WriteLine(m.Value);
-                }
-                else
-                {
-                    newKeywords.Add(new Keywords()
-                    {
-                        QuestionID = id,
-                        Word = m.Value,
-                        RightOrWrong = false,
-                        CreateDate = DateTime.Now
-                    });
-                }
-            }
-
-            Question.Text = Regex.Replace(QString, "<(\"[^\"]*\"|'[^']*'|[^'\">])*>", "");
-
+            List<Keywords> newKeywords = EditorUtil.Replace(QString, id);
+            Question.Text = EditorUtil.OmitTag(QString);
 
             try
             {
                 Keywords = newKeywords;
                 var currentKeywords = _context.Keywords.Where(k => k.QuestionID == id).ToList();
-                var removeKeywords = currentKeywords.Where(k => !newKeywords.Select(w => w.Word).Contains(k.Word)).ToList();
-                _context.RemoveRange(removeKeywords);
-                var addKeywords = newKeywords.Where(k => !currentKeywords.Select(w => w.Word).Contains(k.Word)).ToList();
-                _context.AddRange(addKeywords);
+                _context.RemoveRange(currentKeywords);
+                _context.AddRange(newKeywords);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

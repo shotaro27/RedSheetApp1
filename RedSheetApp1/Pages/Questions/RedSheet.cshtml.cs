@@ -58,24 +58,27 @@ namespace RedSheetApp1.Pages.Questions
 
             var renderText = new StringBuilder();
             var rand = new Random();
-            var split = QString.Split('。');
+            var appendString = EditorUtil.AppendHTML(QString, wrongKeywords, keyword =>
+                $"<span keyword-id='{keyword.KeywordsID}'>{keyword.Word}</span>");
+            var split = appendString.Split('。');
 
-            foreach (var sentence in split)
+            foreach (var appendSentence in split)
             {
-                if (sentence.Length == 0)
-                {
-                    renderText.Append(sentence);
-                    continue;
-                }
-                var mc = Regex.Matches(sentence, string.Join("|", wrongKeywords.Select(k => Regex.Escape(k.Word))));
+                Console.WriteLine(appendSentence);
+                var sentence = EditorUtil.OmitTag(appendSentence);
+                if (string.IsNullOrEmpty(sentence)) continue;
+
+                var mc = Regex.Matches(appendSentence, "<span keyword-id='\\d+'>.+?</span>");
                 if (mc.Count == 0)
                 {
                     renderText.Append($"{sentence}。");
                 }
                 else
                 {
-                    var m = mc[rand.Next(0, mc.Count)];
-                    var keyword = Keywords.FirstOrDefault(k => k.Word == m.Value);
+                    var mIndex = rand.Next(0, mc.Count);
+                    var m = mc[mIndex];
+                    var keywordID = int.Parse(Regex.Match(m.Value, "(?<=<span keyword-id=')\\d+?(?='>)").Value);
+                    var keyword = Keywords.Find(k => k.KeywordsID == keywordID);
                     if (keyword == null)
                     {
                         renderText.Append($"{sentence}。");
@@ -90,7 +93,7 @@ namespace RedSheetApp1.Pages.Questions
                         + $"<label class='redsheet-wrong' for='wrong-{keyword.KeywordsID}'> × </label>"
                         + "</div>"
                         + $"<a class='redsheet'>{keyword.Word}</a></span>";
-                        renderText.Append($"{sentence[..m.Index]}{appendText}{sentence[(m.Index + m.Length)..]}。");
+                        renderText.Append($"{appendSentence[..m.Index]}{appendText}{appendSentence[(m.Index + m.Length)..]}。");
                     }
                 }
             }
