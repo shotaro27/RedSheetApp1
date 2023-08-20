@@ -14,9 +14,13 @@ namespace RedSheetApp1.Pages.Questions
     {
         private readonly RedSheetApp1Context _context;
         public static Question CurrentQuestion { get; set; }
+        public static List<Keywords> CurrentKeywords { get; set; }
 
         [BindProperty]
         public Question Question { get; set; }
+
+        [BindProperty]
+        public string QString { get; set; }
 
         public CreateModel(RedSheetApp1Context context)
         {
@@ -29,10 +33,13 @@ namespace RedSheetApp1.Pages.Questions
             {
                 Question = CurrentQuestion;
                 Question.Text = TempData["Text"].ToString();
+                QString = EditorUtil.AppendTag(Question.Text, CurrentKeywords);
             }
             else
             {
                 Question = new Question();
+                CurrentKeywords = new List<Keywords>();
+                QString = "";
             }
             return Page();
         }
@@ -41,13 +48,15 @@ namespace RedSheetApp1.Pages.Questions
         // more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync(string send)
         {
+            CurrentKeywords = EditorUtil.Replace(QString, -1);
+            Question.Text = EditorUtil.OmitTag(QString);
             if (send == "cropimage")
             {
                 CurrentQuestion = Question;
                 return RedirectToPage("./CropImage");
             }
 
-            if (!ModelState.IsValid || string.IsNullOrEmpty(Question.Text))
+            if (!ModelState.IsValid || string.IsNullOrEmpty(QString))
             {
                 return Page();
             }
@@ -65,17 +74,8 @@ namespace RedSheetApp1.Pages.Questions
             await _context.SaveChangesAsync();
             var id = Question.QuestionID;
 
-            foreach (var word in Question.ExtractKeywords())
-            {
-                var Keyword = new Keywords
-                {
-                    QuestionID = id,
-                    Word = word,
-                    RightOrWrong = false,
-                    CreateDate = DateTime.Now
-                };
-                _context.Keywords.Add(Keyword);
-            }
+            CurrentKeywords.ForEach(k => k.QuestionID = id);
+            _context.Keywords.AddRange(CurrentKeywords);
 
             await _context.SaveChangesAsync();
             
