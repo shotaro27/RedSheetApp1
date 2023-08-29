@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Azure;
-using Azure.AI.TextAnalytics;
+using RedSheetApp1.Pages.Questions;
+using OpenAI_API;
+using OpenAI_API.Chat;
 
 namespace RedSheetApp1.Models
 {
@@ -19,20 +20,11 @@ namespace RedSheetApp1.Models
         public string Text { get; set; }
         public string Title { get; set; }
 
-        static readonly string endpoint = "https://redsheet.cognitiveservices.azure.com/";
-        static readonly string subscriptionKey = "ff767535093e42d68e8ea7b016ae52bd";
-
         static readonly string ChatGPTKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY", EnvironmentVariableTarget.User);
-
-        public KeyPhraseCollection ExtractKeywords()
-        {
-            var textClient = AuthenticateTextAnalytics(endpoint, subscriptionKey);
-            return KeyPhraseExtract(textClient, Text);
-        }
 
         internal async Task<string> GetKeywordsFromChatGPTAsync()
         {
-            var api = new OpenAI_API.OpenAIAPI(ChatGPTKey);
+            var api = new OpenAIAPI(ChatGPTKey);
             var chat = api.Chat.CreateConversation();
 
             var text = @$"# Imperative Statement:
@@ -52,24 +44,65 @@ Based on the following constraints and input sentences, mark the key words and p
 
 # Output Sentences:
 ";
-            // ChatGPTに質問
             chat.AppendUserInput(text);
 
-            // ChatGPTの回答
             string response = await chat.GetResponseFromChatbotAsync();
             Console.WriteLine(response);
             return response;
         }
-
-        public static TextAnalyticsClient AuthenticateTextAnalytics(string endpoint, string key)
+        internal async Task<(QASet, Conversation)> GetNextQuestionFromChatGPTAsync(Conversation chat)
         {
-            return new TextAnalyticsClient(new Uri(endpoint), new AzureKeyCredential(key));
+            Console.WriteLine(chat);
+            foreach (var item in chat.Messages)
+            {
+                Console.WriteLine(item);
+            }
+
+            var text = @$"Output:
+";
+            chat.AppendUserInput(text);
+
+            string response = await chat.GetResponseFromChatbotAsync();
+            Console.WriteLine(response);
+            if (response.Contains("```"))
+            {
+                response = response.Split("```")[1];
+            }
+            response = response.Split("}")[0] + "}";
+
+            var QA = JsonConvert.DeserializeObject<QASet>(response);
+            return (QA, chat);
         }
 
-        public static KeyPhraseCollection KeyPhraseExtract(TextAnalyticsClient client, string text)
+        internal async Task<(QASet, Conversation)> GetQuestionFromChatGPTAsync()
         {
-            var response = client.ExtractKeyPhrases(text, "ja");
-            return response.Value;
+            var api = new OpenAIAPI(ChatGPTKey);
+            var chat = api.Chat.CreateConversation(new ChatRequest() { MaxTokens = 80 });
+
+            var text = @$"Please submit questions where the input text is the basis for the question in a question-and-answer format.
+Answers should be no more than 2 words.
+Outputs should be given one question at a time, and one question should be given each time ""Output:"" is entered.
+
+Output Format:
+{{""Question"": ""問題"", ""Answer"": ""解答""}}
+
+Input:
+{Text}
+
+Output:
+";
+            chat.AppendUserInput(text);
+
+            string response = await chat.GetResponseFromChatbotAsync();
+            Console.WriteLine(response);
+            if (response.Contains("```"))
+            {
+                response = response.Split("```")[1];
+            }
+            response = response.Split("}")[0] + "}";
+
+            var QA = JsonConvert.DeserializeObject<QASet>(response);
+            return (QA, chat);
         }
     }
 }
