@@ -9,7 +9,7 @@
 <hr />
 <div class="row">
 	<div class="col-md-8">
-		<form method="post">
+		<form name="create" method="post">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<div class="form-group">
 				<label asp-for="Question.Title" class="control-label">タイトル</label>
@@ -21,6 +21,9 @@
 				<textarea asp-for="QString" class="form-control js-editor"></textarea>
 				<span asp-validation-for="QString" class="text-danger"></span>
 				<button type="submit" name="send" value="cropimage" class="btn btn-link">画像から抽出したテキストを追加……</button>
+				<button type="submit" name="send" value="extract" class="btn btn-primary">
+						<span class="visually-hidden">キーワードを抽出</span>
+					</button>
 			</div>
 			<div class="form-group">
 				<button type="submit" name="send" value="create" class="btn btn-primary">作成</button>

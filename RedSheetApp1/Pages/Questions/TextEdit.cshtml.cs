@@ -33,16 +33,6 @@ namespace RedSheetApp1.Pages.Questions
         {
             var question = CreateModel.CurrentQuestion;
             question.Text += text;
-            foreach (var word in question.ExtractKeywords())
-            {
-                var Keyword = new Keywords
-                {
-                    Word = word,
-                    RightOrWrong = false,
-                    CreateDate = DateTime.Now
-                };
-                CreateModel.CurrentKeywords.Add(Keyword);
-            }
 
             TempData["Text"] = question.Text;
 

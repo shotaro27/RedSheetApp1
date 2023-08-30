@@ -17,7 +17,7 @@ namespace RedSheetApp1.Pages.Questions
     public class CropImageModel : PageModel
     {
         static readonly string endpoint = "https://redsheet.cognitiveservices.azure.com/";
-        static readonly string subscriptionKey = "ff767535093e42d68e8ea7b016ae52bd";
+        static readonly string subscriptionKey = Environment.GetEnvironmentVariable("COGNITIVESERVICE_KEY", EnvironmentVariableTarget.User);
 
         public static IList<Line> TextData { get; set; }
 

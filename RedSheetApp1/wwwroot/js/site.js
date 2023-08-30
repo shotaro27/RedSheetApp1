@@ -15,3 +15,7 @@ window.onload = () => {
     console.log(popoverList);
     console.log(tooltipList);
 };
+
+$("form").on("submit", () => {
+    $("#loading").removeClass("d-none");
+});

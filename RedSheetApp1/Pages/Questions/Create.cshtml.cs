@@ -35,6 +35,11 @@ namespace RedSheetApp1.Pages.Questions
                 Question.Text = TempData["Text"].ToString();
                 QString = EditorUtil.AppendTag(Question.Text, CurrentKeywords);
             }
+            else if (TempData["Extracted"] != null)
+            {
+                Question = CurrentQuestion;
+                QString = TempData["Extracted"].ToString();
+            }
             else
             {
                 Question = new Question();
@@ -54,6 +59,14 @@ namespace RedSheetApp1.Pages.Questions
             {
                 CurrentQuestion = Question;
                 return RedirectToPage("./CropImage");
+            }
+
+            if (send == "extract")
+            {
+                if (string.IsNullOrEmpty(Question.Text)) return Page();
+                var result = await Question.GetKeywordsFromChatGPTAsync();
+                TempData["Extracted"] = result;
+                return RedirectToPage("./Create");
             }
 
             if (!ModelState.IsValid || string.IsNullOrEmpty(QString))

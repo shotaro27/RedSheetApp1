@@ -195,3 +195,20 @@ tr.focus-color:hover {
     background: #cff6!important;
     cursor: pointer;
 }
+
+.btn span.spinner-border {
+    vertical-align: -0.125em;
+}
+
+#loading {
+    top: 0 !important;
+    left: 0 !important;
+    background: rgba(0, 0, 0, .5);
+    z-index: 10000;
+}
+
+    #loading .text-center {
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%);
+    }
