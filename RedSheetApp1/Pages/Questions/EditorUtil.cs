@@ -55,7 +55,7 @@ namespace RedSheetApp1.Pages.Questions
 
         public static string AppendHTML(string text, List<Keywords> keywords, Func<Keywords, string> sentence)
         {
-            var QString = HttpUtility.HtmlEncode(text);
+            var QString = text;
 
             foreach (var keyword in keywords)
             {
@@ -82,9 +82,9 @@ namespace RedSheetApp1.Pages.Questions
 
         public static string ReplaceNthString(string input, int index, string src, string dst)
         {
-            var regex = new Regex(src);
+            var regex = new Regex(Regex.Escape(src));
             var input2 = regex.Replace(input, dst, index + 1);
-            regex = new Regex(dst);
+            regex = new Regex(Regex.Escape(dst));
             return regex.Replace(input2, src, index);
         }
     }

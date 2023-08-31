@@ -12,13 +12,9 @@
 		<form method="post">
 			<div class="form-group">
 				<input type="file" accept='image/*' onchange="OnFileSelect(this);" multiple>
-				<button type="button" class="btn btn-primary" id="cropbutton" disabled data-target="#modal" data-toggle="modal">
-					画像を切り取る
-				</button>
 				<input type="hidden" id="croppedimage" name="imgurl" value="" />
-				<div id="image-area"></div>
+				<div id="image-area" class="card-group"></div>
 				<div id="cropped-image-area"></div>
-				<div id="selected-image"></div>
 				<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
@@ -69,7 +65,7 @@
 					fileReader.onload = (function () {
 						console.log("load");
 						let newImage = new Image();
-						newImage.classList.add("crop-image");
+						newImage.classList.add("result-image");
 						newImage.src = fileReader.result;
 						newImage.id = `img${index}`;
 						newImage.alt = index;
@@ -104,7 +100,12 @@
 							var modal = new bootstrap.Modal(document.getElementById('modal'));
 							modal.show();
 						};
-						$('#image-area').append(newImage);
+						var imageModel = $("<div>");
+						newImage.classList.add("card-img");
+						imageModel.addClass(["card", "text-white", "crop-image"]);
+						imageModel.append(newImage);
+						imageModel.append(`<div class="card-img-overlay"><h5 class="card-title">${index + 1}枚目</h5></div>`);
+						$('#image-area').append(imageModel);
 						$('#cropped-image-area').append(newCroppedImage);
 						index++;
 					});
@@ -164,7 +165,7 @@
 
 			$(`#img${selected}`).attr("src", croppedCanvas.toDataURL());
 
-			let val = $('.crop-image').map(function () {
+			let val = $('.result-image').map(function () {
 				return $(this).attr("src");
 			}).get().join("|");
 

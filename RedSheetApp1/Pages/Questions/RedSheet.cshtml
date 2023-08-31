@@ -13,14 +13,18 @@
 		<div name="question" class="card">
 			<div class="card-body">
 				@Html.Raw(Model.QString)
+				<div class="redsheet-back d-none"></div>
 			</div>
 		</div>
 		<br />
 		<input type='hidden' asp-for="Question.QuestionID" name='id'>
+		<input type="hidden" asp-for="Question.CreateDate" />
+		<input type="hidden" asp-for="Question.Title" />
+		<input type="hidden" asp-for="Question.Text" />
 		<input type='hidden' id="q-msg" name='msg'>
 		<div class="form-group">
 			<button type="submit" name="send" value="done" class="send btn btn-primary">完了</button>
-			<button type="submit" name="send" value="replay" class="send btn btn-success">↺</button>
+			<button type="submit" name="send" value="replay" class="send btn btn-success">問題を変える</button>
 		</div>
 	</form>
 </div>
@@ -38,20 +42,26 @@
 		});
 		console.log($(this).parent().attr("keyword-id"));
 		$(this).removeClass("redsheet");
+		$(this).addClass("redsheet-clear");
+		$(".redsheet-back").removeClass("d-none");
 	});
 
 	$(document).on("click", ".redsheet-right", function (e) {
 		const parent = $(this).parent();
+		parent.parent().children("a").removeClass("redsheet-clear");
 		console.log(parent.parent().attr("keyword-id"), "right");
 		parent.css("display", "none");
 		parent.prop("check-complete", true);
+		$(".redsheet-back").addClass("d-none");
 	});
 
 	$(document).on("click", ".redsheet-wrong", function (e) {
 		const parent = $(this).parent();
+		parent.parent().children("a").removeClass("redsheet-clear");
 		console.log(parent.parent().attr("keyword-id"), "wrong");
 		parent.css("display", "none");
 		parent.prop("check-complete", true);
+		$(".redsheet-back").addClass("d-none");
 	});
 
 	$('.redsheet-option').change(() => {

@@ -64,7 +64,8 @@ namespace RedSheetApp1.Pages.Questions
             if (send == "extract")
             {
                 if (string.IsNullOrEmpty(Question.Text)) return Page();
-                var result = await Question.GetKeywordsFromChatGPTAsync();
+                CurrentQuestion = Question;
+                var result = Question.ExtractKeywords();
                 TempData["Extracted"] = result;
                 return RedirectToPage("./Create");
             }

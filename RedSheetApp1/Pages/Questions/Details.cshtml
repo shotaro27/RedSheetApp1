@@ -29,15 +29,17 @@
 		<dt class="col-sm-2">
 			進行度
 		</dt>
-		<dd class="col-sm-10">
+		<dd class="col-sm-8">
 			<div class="progress">
 				<div class="progress-bar" role="progressbar" style="width: @($"{Model.Progress}%");"
 					 aria-valuenow="@(Model.Progress)" aria-valuemin="0" aria-valuemax="100">
 					@($"{Model.Progress}%")
 				</div>
 			</div>
+		</dd>
+		<dd class="col-sm-2">
 			<div>
-				<a asp-page="./Reset" asp-route-id="@Model.Question.QuestionID" class="btn btn-link">リセット</a>
+				<a asp-page="./Reset" asp-route-id="@Model.Question.QuestionID" class="btn-link inline-link">リセット</a>
 			</div>
 		</dd>
 		<dt class="col-sm-2">

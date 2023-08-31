@@ -115,6 +115,11 @@ namespace RedSheetApp1.Pages.Questions
                 return Route(send, id);
             }
 
+            Question.QuestionID = id;
+
+            _context.Attach(Question).State = EntityState.Modified;
+            Question.UpdateDate = DateTime.Now;
+
             var sets = msg.Split("|");
             foreach (var set in sets.Take(sets.Length - 1))
             {
