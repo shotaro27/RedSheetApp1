@@ -5,10 +5,17 @@
 	ViewData["Title"] = "新規作成";
 }
 
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a asp-page="/Index">ホーム</a></li>
+		<li class="breadcrumb-item active" aria-current="page">新規問題作成</li>
+	</ol>
+</nav>
+
 <h4>新規問題作成</h4>
 <hr />
 <div class="row">
-	<div class="col-md-8">
+	<div class="col-12">
 		<form name="create" method="post">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<div class="form-group">
@@ -17,13 +24,17 @@
 				<span asp-validation-for="Question.Title" class="text-danger"></span>
 			</div>
 			<div class="form-group">
-				<label asp-for="QString" class="control-label">内容</label>
-				<textarea asp-for="QString" class="form-control js-editor"></textarea>
+				<label asp-for="QString" class="control-label">
+					内容　
+					<button type="submit" name="send" value="cropimage" class="btn-link inline-link">画像を読み込む</button>
+				</label>
+				<div id="content-area">
+					<textarea asp-for="QString" class="form-control js-editor"></textarea>
+				</div>
 				<span asp-validation-for="QString" class="text-danger"></span>
-				<button type="submit" name="send" value="cropimage" class="btn btn-link">画像から抽出したテキストを追加……</button>
 				<button type="submit" name="send" value="extract" class="btn btn-primary">
-						<span class="visually-hidden">キーワードを抽出</span>
-					</button>
+					<span class="visually-hidden">キーワードを抽出</span>
+				</button>
 			</div>
 			<div class="form-group">
 				<button type="submit" name="send" value="create" class="btn btn-primary">作成</button>
@@ -39,6 +50,6 @@
 <script src="~/js/liteeditor.js"></script>
 
 @section Scripts {
-	
+
 	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -1,21 +1,27 @@
 ﻿@page
 @model IndexModel
 @{
-	ViewData["Title"] = "Home page";
+	ViewData["Title"] = "ホーム";
 }
 
 <div class="text-center">
 	<h1 class="display-4">Red Sheet!</h1>
 	<p>@ViewData["Timestamp"]</p>
-	<h4>最近の問題　<a asp-page="/Questions/Index" class="btn btn-outline-primary">問題一覧</a></h4>
 </div>
+<hr />
+<h3>問題一覧　<a asp-page="/Questions/Create" class="btn btn-outline-primary">新規問題</a></h3>
 
 <table class="table table-striped w-auto row" style="table-layout: fixed">
-	<tbody class="col-md-8 offset-md-2">
-		@foreach (var item in Model.QuestionSets.Take(3))
+	<tbody class="col-12">
+		@foreach (var item in Model.QuestionSets)
 		{
 			<tr class="row focus-color" onclick="goQuestion(@item.Question.QuestionID)">
-				<td class="d-block d-sm-table-cell col-12 col-sm-6">
+				<td class="d-block d-sm-table-cell col-3 col-sm-3 col-lg-2">
+					<div class="question-content">
+						@Html.DisplayFor(modelItem => item.Question.UpdateDate)
+					</div>
+				</td>
+				<td class="d-block d-sm-table-cell col-9 col-sm-3 col-lg-4">
 					<div class="question-content">
 						@Html.DisplayFor(modelItem => item.Question.Title)
 					</div>

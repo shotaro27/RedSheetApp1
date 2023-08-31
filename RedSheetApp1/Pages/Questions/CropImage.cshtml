@@ -8,14 +8,17 @@
 <h4>画像から抽出する</h4>
 <hr />
 <div class="row">
-	<div class="col-md-8">
+	<div class="col-12">
 		<form method="post">
 			<div class="form-group">
-				<input type="file" accept='image/*' onchange="previewImage(this);">
+				<input type="file" accept='image/*' onchange="OnFileSelect(this);" multiple>
 				<button type="button" class="btn btn-primary" id="cropbutton" disabled data-target="#modal" data-toggle="modal">
 					画像を切り取る
 				</button>
 				<input type="hidden" id="croppedimage" name="imgurl" value="" />
+				<div id="image-area"></div>
+				<div id="cropped-image-area"></div>
+				<div id="selected-image"></div>
 				<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
@@ -52,6 +55,66 @@
 		maxSizeMB: 1,
 		maxWidthOrHeight: 1920
 	};
+
+	let selected = 0;
+
+	function OnFileSelect(obj) {
+		$('#image-area').html("");
+		$('#cropped-image-area').html("");
+		let index = 0;
+		for (let file of obj.files) {
+			imageCompression(file, options)
+				.then(function (compressedFile) {
+					let fileReader = new FileReader();
+					fileReader.onload = (function () {
+						console.log("load");
+						let newImage = new Image();
+						newImage.classList.add("crop-image");
+						newImage.src = fileReader.result;
+						newImage.id = `img${index}`;
+						newImage.alt = index;
+						let newCroppedImage = new Image();
+						newCroppedImage.classList.add("cropped-image", "d-none");
+						newCroppedImage.src = fileReader.result;
+						newCroppedImage.id = `croppedimg${index}`;
+						newCroppedImage.alt = index;
+						newImage.draggable = true;
+						newImage.ondragstart = () => {
+							event.dataTransfer.setData("text/plain", event.target.id);
+						};
+						newImage.ondragover = () => { event.preventDefault(); };
+						newImage.ondrop = (obj) => {
+							event.preventDefault();
+							const target = obj.target;
+							var id = event.dataTransfer.getData("text/plain");
+							var base = document.getElementById(id);
+							var baseCropped = document.getElementById("cropped" + id);
+							var targetCropped = document.getElementById("cropped" + target.id);
+							var buff = target.src;
+							target.src = base.src;
+							base.src = buff;
+							buff = targetCropped.src;
+							targetCropped.src = baseCropped.src;
+							baseCropped.src = buff;
+						}
+						newImage.onclick = () => {
+							$('#image').attr("src", newCroppedImage.src);
+							selected = newImage.alt;
+							console.log();
+							var modal = new bootstrap.Modal(document.getElementById('modal'));
+							modal.show();
+						};
+						$('#image-area').append(newImage);
+						$('#cropped-image-area').append(newCroppedImage);
+						index++;
+					});
+					fileReader.readAsDataURL(compressedFile);
+				})
+				.catch(function (error) {
+					console.log(error.message);
+				});
+		}
+	}
 
 	function previewImage(obj) {
 		imageCompression(obj.files[0], options)
@@ -99,7 +162,13 @@
 
 			croppedCanvas = cropper.getCroppedCanvas();
 
-			$("#croppedimage").attr("value", croppedCanvas.toDataURL());
+			$(`#img${selected}`).attr("src", croppedCanvas.toDataURL());
+
+			let val = $('.crop-image').map(function () {
+				return $(this).attr("src");
+			}).get().join("|");
+
+			$("#croppedimage").attr("value", val);
 			$("#send").prop("disabled", false);
 		});
 	});

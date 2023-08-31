@@ -5,8 +5,16 @@
 	ViewData["Title"] = "リセット";
 }
 
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a asp-page="/Index">ホーム</a></li>
+		<li class="breadcrumb-item"><a asp-page="Details" asp-route-id="@Model.Question.QuestionID">問題の詳細</a></li>
+		<li class="breadcrumb-item active" aria-current="page">進行度リセット</li>
+	</ol>
+</nav>
+
 <div>
-	<h3>この問題をリセットしてもよろしいですか？</h3>
+	<h3>この問題の進行度をリセットしてもよろしいですか？</h3>
 	<h4>@Html.DisplayFor(modelItem => modelItem.Question.Title)</h4>
 	<hr />
 	<dl class="row">

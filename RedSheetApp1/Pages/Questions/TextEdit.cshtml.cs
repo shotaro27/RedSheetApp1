@@ -26,8 +26,13 @@ namespace RedSheetApp1.Pages.Questions
                 return NotFound();
             }
             var size = Lines.Select(GetSize).Average();
-            Text = string.Join("", Lines.Where(line => size - GetSize(line) <= 12).Select(line => line.Text));
-            return Page();
+            Text = string.Join("", Lines.Where(line => size - GetSize(line) <= 2).Select(line => line.Text));
+
+            var question = CreateModel.CurrentQuestion;
+            question.Text += Text;
+            TempData["Text"] = question.Text;
+
+            return RedirectToPage("./Create");
         }
         public IActionResult OnPost(string text)
         {

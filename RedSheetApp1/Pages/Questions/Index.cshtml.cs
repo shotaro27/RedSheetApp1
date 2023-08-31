@@ -23,11 +23,9 @@ namespace RedSheetApp1.Pages.Questions
         public IList<QuestionSet> QuestionSets { get; set; }
         public IList<Keywords> Keywords { get; set; }
 
-        public async Task OnGetAsync()
+        public IActionResult OnGet()
         {
-            Question = await _context.Question.ToListAsync();
-            Keywords = await _context.Keywords.ToListAsync();
-            QuestionSets = Question.Select(q => new QuestionSet(q, Keywords)).OrderByDescending(s => s.Question.UpdateDate).ToList();
+            return Redirect("/");
         }
     }
 }

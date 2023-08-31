@@ -2,23 +2,26 @@
 @model RedSheetApp1.Pages.Questions.DetailsModel
 
 @{
-	ViewData["Title"] = "Details";
+	ViewData["Title"] = "問題の詳細";
 }
+
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a asp-page="/Index">ホーム</a></li>
+		<li class="breadcrumb-item active" aria-current="page">問題の詳細</li>
+	</ol>
+</nav>
 
 <h1>問題の詳細</h1>
 
 <div>
 	<div class="row">
-		<div class="col-md-6 col-sm-12">
+		<div class="col-md-5 col-sm-12">
 			<h4>@Html.DisplayFor(modelItem => modelItem.Question.Title)</h4>
 		</div>
-		<div class="col-md-6 col-sm-12 btn-group btn-group-sm" role="group">
-			<a asp-page="./Index" class="btn btn-secondary">一覧に戻る</a>
-			<a asp-page="./Edit" asp-route-id="@Model.Question.QuestionID" class="btn btn-outline-success">編集</a>
-			<a asp-page="./Reset" asp-route-id="@Model.Question.QuestionID" class="btn btn-outline-secondary">リセット</a>
-			<a asp-page="./Delete" asp-route-id="@Model.Question.QuestionID" class="btn btn-outline-danger">削除</a>
+		<div class="offset-md-1 col-md-6 col-sm-12 btn-group">
 			<a asp-page="./RedSheet" asp-route-id="@Model.Question.QuestionID" class="btn btn-danger">Red Sheet!</a>
-			<a asp-page="./QA" asp-route-id="@Model.Question.QuestionID" class="btn btn-info">QA</a>
+			<a asp-page="./QA" asp-route-id="@Model.Question.QuestionID" class="btn btn-info">一問一答に挑戦</a>
 		</div>
 	</div>
 	<hr />
@@ -28,10 +31,13 @@
 		</dt>
 		<dd class="col-sm-10">
 			<div class="progress">
-				<div class="progress-bar" role="progressbar" style="width: @($"{Math.Round(Model.QuestionSet.Progress * 100)}%");"
-					 aria-valuenow="@(Math.Round(Model.QuestionSet.Progress * 100))" aria-valuemin="0" aria-valuemax="100">
-					@($"{Math.Round(Model.QuestionSet.Progress * 100)}%")
+				<div class="progress-bar" role="progressbar" style="width: @($"{Model.Progress}%");"
+					 aria-valuenow="@(Model.Progress)" aria-valuemin="0" aria-valuemax="100">
+					@($"{Model.Progress}%")
 				</div>
+			</div>
+			<div>
+				<a asp-page="./Reset" asp-route-id="@Model.Question.QuestionID" class="btn btn-link">リセット</a>
 			</div>
 		</dd>
 		<dt class="col-sm-2">
@@ -51,6 +57,11 @@
 		</dt>
 		<dd class="col-sm-10">
 			@Html.Raw(Model.QString)
+		</dd>
+		<dt class="col-sm-2"></dt>
+		<dd class="col-sm-10">
+			<a asp-page="./Edit" asp-route-id="@Model.Question.QuestionID" class="btn btn-outline-success">編集</a>
+			<a asp-page="./Delete" asp-route-id="@Model.Question.QuestionID" class="btn btn-outline-danger">削除</a>
 		</dd>
 	</dl>
 </div>

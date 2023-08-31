@@ -84,6 +84,7 @@ body {
     top: -100%;
     right: 0;
     height: 0.6em;
+    white-space: nowrap;
 }
 
 .redsheet:hover {
@@ -98,8 +99,8 @@ body {
 .redsheet-right {
     color: var(--light);
     background-color: var(--primary);
-    font-size: 0.7em;
-    padding: 0 0.5em;
+    font-size: 1em;
+    padding: 0.1em 0.5em;
     border: 1px var(--light);
     border-radius: 10% 0 0 10%;
 }
@@ -107,8 +108,8 @@ body {
 .redsheet-wrong {
     color: var(--light);
     background-color: var(--secondary);
-    font-size: 0.7em;
-    padding: 0 0.5em;
+    font-size: 1em;
+    padding: 0.1em 0.5em;
     border: 1px var(--light);
     border-radius: 0 10% 10% 0;
 }
@@ -188,7 +189,8 @@ body {
 }
 
 html {
-    width: 100vw;
+    width: 100%;
+    overflow-y: scroll;
 }
 
 tr.focus-color:hover {
@@ -212,3 +214,30 @@ tr.focus-color:hover {
         left: 50% !important;
         transform: translate(-50%, -50%);
     }
+
+.btn-link.inline-link {
+    padding: 0;
+    border: 0;
+    display: inline;
+    vertical-align: auto;
+    background: inherit;
+}
+
+.crop-image {
+    width: 16%;
+    height: auto;
+    padding: 1%;
+    margin: 1%;
+}
+
+    .crop-image:hover {
+        cursor: pointer;
+        background: #00f3;
+    }
+
+.cropped-image {
+    width: 16%;
+    height: auto;
+    padding: 1%;
+    margin: 1%;
+}

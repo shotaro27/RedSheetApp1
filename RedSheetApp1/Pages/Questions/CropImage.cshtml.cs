@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace RedSheetApp1.Pages.Questions
         static readonly string endpoint = "https://redsheet.cognitiveservices.azure.com/";
         static readonly string subscriptionKey = Environment.GetEnvironmentVariable("COGNITIVESERVICE_KEY", EnvironmentVariableTarget.User);
 
-        public static IList<Line> TextData { get; set; }
+        public static List<Line> TextData { get; set; }
 
         public IActionResult OnGet()
         {
@@ -37,9 +38,28 @@ namespace RedSheetApp1.Pages.Questions
             }
 
             var visionClient = AuthenticateComputerVision(endpoint, subscriptionKey);
-            TextData = await ReadFileUrlAsync(visionClient, imgurl);
 
-            return RedirectToPage("./TextEdit");
+            TextData = new List<Line>();
+
+            var texts = new StringBuilder();
+
+            foreach (var url in imgurl.Split("|"))
+            {
+                var lines = await ReadFileUrlAsync(visionClient, url);
+                if (lines == null)
+                {
+                    continue;
+                }
+                var size = lines.Select(GetSize).Average();
+                var text = string.Join("", lines.Where(line => GetSize(line) / size > 0.85).Select(line => line.Text));
+                texts.Append(text);
+            }
+
+            var question = CreateModel.CurrentQuestion;
+            question.Text = texts.ToString();
+            TempData["Text"] = question.Text;
+
+            return RedirectToPage("./Create");
         }
 
         public static ComputerVisionClient AuthenticateComputerVision(string endpoint, string key)
@@ -81,5 +101,8 @@ namespace RedSheetApp1.Pages.Questions
 
             return stream;
         }
+
+        public static double GetSize(Line line) => Math.Sqrt(Math.Pow((line.BoundingBox[6] ?? 0) - (line.BoundingBox[0] ?? 0), 2)
+            + Math.Pow((line.BoundingBox[7] ?? 0) - (line.BoundingBox[1] ?? 0), 2));
     }
 }

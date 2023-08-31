@@ -33,7 +33,9 @@
 
 	$(document).on("click", ".redsheet", function (e) {
 		const parent = $(this).parent();
-		parent.children(".redsheet-option").css("display", "inline");
+		parent.children(".redsheet-option").css({
+			display: "inline"
+		});
 		console.log($(this).parent().attr("keyword-id"));
 		$(this).removeClass("redsheet");
 	});

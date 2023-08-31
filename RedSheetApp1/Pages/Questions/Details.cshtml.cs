@@ -25,6 +25,7 @@ namespace RedSheetApp1.Pages.Questions
         public QuestionSet QuestionSet { get; set; }
         public IList<Keywords> Keywords { get; set; }
         public string QString { get; set; }
+        public int Progress { get; set; }
 
         [BindProperty]
         public Keywords NewWord { get; set; }
@@ -53,6 +54,7 @@ namespace RedSheetApp1.Pages.Questions
             }
 
             QString = EditorUtil.AppendTag(Question.Text, Keywords.ToList());
+            Progress = (int)Math.Round(QuestionSet.Progress * 100);
 
             return Page();
         }

@@ -5,6 +5,14 @@
 	ViewData["Title"] = "編集";
 }
 
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="#" onclick="leavePage('/Index')">ホーム</a></li>
+		<li class="breadcrumb-item"><a href="#" onclick="leavePage('./Details?id=@(Model.Question.QuestionID)')">問題の詳細</a></li>
+		<li class="breadcrumb-item active" aria-current="page">編集</li>
+	</ol>
+</nav>
+
 <h4>編集</h4>
 <hr />
 <div class="row">
@@ -21,7 +29,9 @@
 			</div>
 			<div class="form-group">
 				<label asp-for="QString" class="control-label">内容</label>
-				<textarea asp-for="QString" class="form-control js-editor"></textarea>
+				<div id="content-area">
+					<textarea asp-for="QString" class="form-control js-editor"></textarea>
+				</div>
 			</div>
 			<div class="form-group">
 				<input type="submit" value="保存" class="btn btn-primary" />
@@ -30,11 +40,15 @@
 	</div>
 </div>
 
-<div>
-	<a asp-page="Details" asp-route-id="@Model.Question.QuestionID">詳細に戻る</a>
-</div>
-
 <script src="~/js/liteeditor.js"></script>
+
+<script>
+	const leavePage = (url) => {
+		if (confirm("編集は保存されません。ページを離れてもよろしいですか？")) {
+			location.href = url;
+		}
+	}
+</script>
 
 @section Scripts {
 	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
